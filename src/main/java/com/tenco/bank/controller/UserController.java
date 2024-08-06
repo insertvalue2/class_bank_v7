@@ -15,9 +15,15 @@ import com.tenco.bank.service.UserService;
 @RequestMapping("/user") // 대문 처리 
 public class UserController {
 	
-	@Autowired // DI 처리 
+	 
 	private UserService userService;
-
+	
+	// DI 처리 
+	@Autowired // 노란색 경고는 사용할 필요 없음 - 가독성 위해서 선언해도 됨
+	public UserController(UserService service) {
+		this.userService = service;
+	}
+	
 	/**
 	 * 회원 가입 페이지 요청 
 	 * 주소 설계 : http://localhost:8080/user/sign-up
