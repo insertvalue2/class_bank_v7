@@ -31,7 +31,6 @@ dependencies {
 	// TODO - check  
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	
-	
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 	compileOnly 'org.projectlombok:lombok'
