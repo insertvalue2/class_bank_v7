@@ -28,7 +28,7 @@ spring:
   
   output:
     ansi:
-      enabled: always #콘솔 출력에 ANSI 색상 코드를 사용할 수 있도록 설정 
+      enabled: always #콘솔 출력에 ANSI 코드를 사용할 수 있도록 설정 
       
 #mybatis 설정
 mybatis:
