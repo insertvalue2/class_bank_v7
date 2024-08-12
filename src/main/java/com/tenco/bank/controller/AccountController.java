@@ -1,13 +1,16 @@
 package com.tenco.bank.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tenco.bank.dto.DepositDTO;
 import com.tenco.bank.dto.SaveDTO;
@@ -16,11 +19,13 @@ import com.tenco.bank.dto.WithdrawalDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.handler.exception.UnAuthorizedException;
 import com.tenco.bank.repository.model.Account;
+import com.tenco.bank.repository.model.HistoryAccount;
 import com.tenco.bank.repository.model.User;
 import com.tenco.bank.service.AccountService;
 import com.tenco.bank.utils.Define;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.server.PathParam;
 
 @Controller  // IoC 대상(싱글톤으로 관리) 
 @RequestMapping("/account")
@@ -241,7 +246,37 @@ public class AccountController {
 		return "redirect:/account/list";
 	}
 	
+	/**
+	 * 계좌 상세 보기 페이지 
+	 * 주소 설계 : http://localhost:8080/account/detail/1?type=all, deposit, withdraw
+	 * @return
+	 */
+	@GetMapping("/detail/{accountId}")
+	public String detail(@PathVariable(name = "accountId") Integer accountId, @RequestParam(required = false, name ="type")  String type, Model model) {		
+		// 인증검사  
+		User principal = (User) session.getAttribute(Define.PRINCIPAL); // 다운 캐스팅
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
+		}
+		
+		// 유효성 검사 
+		List<String> validTypes = Arrays.asList("all", "deposit", "withdrawal");
+		
+		if(!validTypes.contains(type)) {
+			throw new DataDeliveryException("유효하지 않은 접근 입니다", HttpStatus.BAD_REQUEST);
+		}
+		
+		Account account = accountService.readAccountById(accountId);
+		List<HistoryAccount> historyList = accountService.readHistoryByAccountId(type, accountId);
+		
+		
+		model.addAttribute("account", account);
+		model.addAttribute("historyList", historyList);
+		return "account/detail";
+	}
+	
 }
+
 
 
 

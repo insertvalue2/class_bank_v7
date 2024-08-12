@@ -30,5 +30,41 @@
 		select * from history_tb
 	</select>
 	
+	<select id="findByAccountIdAndTypeOfHistory" resultType="com.tenco.bank.repository.model.HistoryAccount">
+		<if test="type == 'all'">
+			select h.id, h.amount,
+				case
+					when h.w_account_id = #{accountId} then (h.w_balance) 
+			        when h.d_account_id = #{accountId} then (h.d_balance)
+			    end  as balance,
+			    coalesce(cast(wa.number as char(10)), 'ATM') as sender, 
+			    coalesce(cast(da.number as char(10)), 'ATM') as receiver,
+			    h.created_at
+			from history_tb as h 
+			left join account_tb as wa on h.w_account_id = wa.id
+			left join account_tb as da on h.d_account_id = da.id  
+			where h.w_account_id = #{accountId} OR h.d_account_id = #{accountId}
+		</if>
+		<if test="type == 'deposit'">
+			select h.id, h.amount, h.d_balance as balance, h.created_at, 
+				coalesce(CAST(wa.number as CHAR(10)) , 'ATM') as sender, 
+			    da.number as receiver
+			from history_tb as h 
+			left join account_tb as wa on wa.id = h.w_account_id
+			left join account_tb as da on da.id = h.d_account_id 
+			where h.d_account_id = #{accountId}
+		</if>
+		
+		<if test="type == 'withdrawal'">
+			select h.id, h.amount, h.w_balance AS balance, h.created_at, 
+				   coalesce(cast(da.number as CHAR(10)), 'ATM')  as receiver, 
+			       wa.number as sender 
+			from history_tb as h 
+			left join account_tb as wa on wa.id = h.w_account_id
+			left join account_tb as da on da.id = h.d_account_id 
+			where h.w_account_id = #{accountId}
+		</if>
+	</select>
+	
 </mapper>
 
