@@ -15,20 +15,16 @@ import com.tenco.bank.service.UserService;
 import com.tenco.bank.utils.Define;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller  
 @RequestMapping("/user")  
+@RequiredArgsConstructor
 public class UserController {
-
-	private UserService userService;
-	private final HttpSession session;
 	
-	// DI 처리 
-	@Autowired // 노란색 경고는 사용할 필요 없음 - 가독성 위해서 선언해도 됨
-	public UserController(UserService service, HttpSession session) {
-		this.userService = service;
-		this.session = session;
-	}
+	@Autowired
+	private final UserService userService;
+	private final HttpSession session;
 	
 	/**
 	 * 회원 가입 페이지 요청 
