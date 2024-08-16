@@ -10,6 +10,12 @@ spring:
     view: 
       prefix: /WEB-INF/view/ #JSP파일이 위치한 디렉토리 접두사를 설정합니다.
       suffix: .jsp #뷰 이름에 자동으로 추가될 파일 확장자를 설정합니다.
+  servlet:
+    multipart:
+      max-file-size: 20MB #파일 최대 크기 20MB
+      max-request-size: 20MB #멀티파트 전체 요청 크기 20MB제한 
+        
+            
   datasource:
     url: jdbc:mysql://localhost:3306/mybank?serverTimezone=Asia/Seoul  #데이터 베이스 연결을 위한 URL을 설정 합니다.
     driver-class-name: com.mysql.cj.jdbc.Driver #드라이버 클래스를 설정 합니다.
@@ -41,3 +47,15 @@ mybatis:
 logging:
   level:
     org.apache.ibatis: DEBUG #MyBatis 로깅 레벨을 DEBUG로 설정하여 실행되는 SQL 쿼리와 내부 로깅 정보를 콘솔에 출력합니다.
+
+    
+# 초기 파라메터 설정 
+file:
+  upload-dir: C:\\work_spring\\upload/
+
+tenco:
+  key: 54d5cb2d332dbdb4850293caae4559ce88b65163f1ea5d4e4b3ac49d772ded14
+
+
+    
+    

@@ -6,8 +6,8 @@
 	<!-- 반드시 세미콜론을 제거 해야 한다.   -->
 	<!-- id는 매칭되어 있는 인터페이스에 메서드 명과 같아야 한다.  -->	
 	<insert id="insert">
-		insert into user_tb(username, password, fullname ) 
-		values( #{username}, #{password}, #{fullname})
+		insert into user_tb(username, password, fullname, origin_file_name, upload_file_name ) 
+		values( #{username}, #{password}, #{fullname}, #{orginFileName}, #{uploadFileName})
 	</insert>
 	
 	<update id="updateById">
